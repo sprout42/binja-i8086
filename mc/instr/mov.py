@@ -41,8 +41,12 @@ class MovRegImm(InstrHasImm, InstrHasWidth, Mov):
 class MovMemImm(InstrHasImm, InstrHasModRegRM, InstrHasWidth, Mov):
     def render(self, addr):
         if self._reg_bits() != 0b000:
-            return Mov.render(self) + asm(
-                ('text', 'illegal')
+            #return Mov.render(self) + asm(
+            #    ('text', 'illegal')
+            #)
+            return asm(
+                ('instr', self.name()),
+                ('opsep', ' ' * (8 - len(self.name())))
             )
 
         tokens = Mov.render(self, addr)

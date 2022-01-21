@@ -188,6 +188,9 @@ class JmpCond(JmpShort):
         else:
             mark_taken = False
 
+        if untaken_label is None:
+            untaken_label = LowLevelILLabel()
+
         name = self.name()
         if name == 'jpe':
             il.append(il.if_expr(il.flag('p'), taken_label, untaken_label))
@@ -221,6 +224,10 @@ class Loop(JmpCond):
             taken_label = LowLevelILLabel()
         else:
             mark_taken = False
+
+        untaken_label = il.get_label_for_address(il.arch, addr + self.length())
+        if untaken_label is None:
+            untaken_label = LowLevelILLabel()
 
         il.append(il.if_expr(self._lift_loop_cond(il), taken_label, untaken_label))
         if mark_taken:
